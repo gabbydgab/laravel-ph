@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class Article extends Model
 {
@@ -20,12 +21,10 @@ class Article extends Model
      *
      * @var array
      */
-    protected $dates = [
-        'published_at'
-    ];
+    protected $dates = ['published_at'];
 
     /**
-     * Get the author of this post.
+     * Get the author of this article.
      */
     public function author()
     {
@@ -33,7 +32,7 @@ class Article extends Model
     }
 
     /**
-     * Get the tags for this post.
+     * Get the tags for this article.
      */
     public function tags()
     {
@@ -41,31 +40,48 @@ class Article extends Model
     }
 
     /**
-     * Get the first article after this post.
+     * Set the published_at attribute.
+     *
+     * @param string $value
+     * @return void
+     */
+    public function setPublishedAtAttribute($value)
+    {
+        if ($value) {
+            $value = Carbon::parse($value)->toDateTimeString();
+        }
+
+        $this->attributes['published_at'] = $value;
+    }
+
+    /**
+     * Get the next record for this article.
      *
      * @return \App\Article|null
      */
-    public function nextArticle()
+    public function nextRecord()
     {
         return Article::where('id', '>', $this->id)
+            ->whereNotNull('published_at')
             ->orderBy('id')
             ->first();
     }
 
     /**
-     * Get the first article before this post.
+     * Get the previous record for this article.
      *
      * @return \App\Article|null
      */
-    public function previousArticle()
+    public function previousRecord()
     {
         return Article::where('id', '<', $this->id)
+            ->whereNotNull('published_at')
             ->orderByDesc('id')
             ->first();
     }
 
     /**
-     * Sync tags for this post.
+     * Sync tags for this article.
      *
      * @param array $tags
      * @return array
@@ -75,5 +91,15 @@ class Article extends Model
         return $this->tags()->sync(collect($tags)->map(function ($name) {
             return Tag::firstOrCreate(compact('name'))->id;
         }));
+    }
+
+    /**
+     * Get the names of the tags for this article
+     *
+     * @return void
+     */
+    public function getTagNames()
+    {
+        return $this->tags->pluck('name')->toArray();
     }
 }

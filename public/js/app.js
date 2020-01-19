@@ -1932,10 +1932,6 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
-/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_1__);
 //
 //
 //
@@ -1975,71 +1971,35 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   inheritAttrs: false,
   props: {
-    value: String,
-    format: {
-      type: String,
-      "default": 'YYYY-MM-DD HH:mm:ss'
+    value: {
+      type: String
     }
   },
   data: function data() {
     return {
-      localValue: this.value,
-      timeInterval: lodash__WEBPACK_IMPORTED_MODULE_0___default.a.times(24).map(function (hour) {
-        return ('0' + hour).slice(-2) + ':00';
-      })
+      localValue: dayjs(this.value).toDate()
     };
   },
   computed: {
-    localValueAsDate: function localValueAsDate() {
-      if (!this.localValue) {
-        return null;
-      }
+    timeIntervals: function timeIntervals() {
+      var _this = this;
 
-      return new Date(this.localValue);
-    },
-    localValueAsTime: function localValueAsTime() {
-      if (!this.localValue) {
-        return null;
-      }
-
-      return dayjs__WEBPACK_IMPORTED_MODULE_1___default()(this.localValue).format('HH:mm');
-    }
-  },
-  methods: {
-    patchDate: function patchDate(value) {
-      var newDate = dayjs__WEBPACK_IMPORTED_MODULE_1___default()(value);
-
-      if (!newDate.isValid()) {
-        this.localValue = null;
-        return;
-      }
-
-      var localDate = dayjs__WEBPACK_IMPORTED_MODULE_1___default()(this.localValue);
-
-      if (!localDate.isValid()) {
-        this.localValue = newDate.format(this.format);
-        return;
-      }
-
-      this.localValue = localDate.set('date', newDate.get('date')).set('month', newDate.get('month')).set('year', newDate.get('year')).format(this.format);
-    },
-    patchTime: function patchTime(value) {
-      this.localValue = this.localValue.replace(/(\d\d):(\d\d)/, value);
+      return _.times(24).filter(function (_) {
+        return dayjs(_this.localValue).isValid();
+      }).flatMap(function (hour) {
+        return [dayjs(_this.localValue).set('hour', hour).set('minute', 0).set('second', 0).toDate(), dayjs(_this.localValue).set('hour', hour).set('minute', 30).set('second', 0).toDate()];
+      });
     }
   },
   watch: {
     localValue: function localValue(value) {
+      if (value && dayjs(value).isValid()) {
+        value = dayjs(value).toISOString();
+      }
+
       this.$emit('input', value);
     }
   }
@@ -20511,15 +20471,6 @@ var render = function() {
           { staticClass: "relative" },
           [
             _c("v-date-picker", {
-              attrs: {
-                value: _vm.localValueAsDate,
-                popover: { visibility: "click" }
-              },
-              on: {
-                input: function($event) {
-                  return _vm.patchDate($event)
-                }
-              },
               scopedSlots: _vm._u([
                 {
                   key: "default",
@@ -20544,7 +20495,14 @@ var render = function() {
                     )
                   }
                 }
-              ])
+              ]),
+              model: {
+                value: _vm.localValue,
+                callback: function($$v) {
+                  _vm.localValue = $$v
+                },
+                expression: "localValue"
+              }
             }),
             _vm._v(" "),
             _c(
@@ -20584,18 +20542,35 @@ var render = function() {
           _c(
             "select",
             {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.localValue,
+                  expression: "localValue"
+                }
+              ],
               staticClass:
                 "block w-full px-3 py-2 pr-10 h-12 bg-white rounded shadow appearance-none leading-tight focus:outline-none",
-              domProps: { value: _vm.localValueAsTime },
               on: {
-                input: function($event) {
-                  return _vm.patchTime($event.target.value)
+                change: function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.localValue = $event.target.multiple
+                    ? $$selectedVal
+                    : $$selectedVal[0]
                 }
               }
             },
-            _vm._l(_vm.timeInterval, function(time) {
-              return _c("option", { key: time, domProps: { value: time } }, [
-                _vm._v(_vm._s(time))
+            _vm._l(_vm.timeIntervals, function(time, i) {
+              return _c("option", { key: i, domProps: { value: time } }, [
+                _vm._v(_vm._s(_vm._f("dateFormat")(time, "HH:mm A")))
               ])
             }),
             0
@@ -33105,7 +33080,11 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js"); // plugins
 
 
-Vue.use(v_calendar__WEBPACK_IMPORTED_MODULE_0___default.a, {}); // components
+Vue.use(v_calendar__WEBPACK_IMPORTED_MODULE_0___default.a, {}); //filters
+
+Vue.filter('dateFormat', function (value, format) {
+  return dayjs(value).format(format);
+}); // components
 
 Vue.component('photo-upload', __webpack_require__(/*! ./components/PhotoUpload.vue */ "./resources/js/components/PhotoUpload.vue")["default"]);
 Vue.component('date-time-picker', __webpack_require__(/*! ./components/DateTimePicker.vue */ "./resources/js/components/DateTimePicker.vue")["default"]);
@@ -33124,6 +33103,7 @@ var app = new Vue({
 /***/ (function(module, exports, __webpack_require__) {
 
 window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+window.dayjs = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
  * for JavaScript based Bootstrap features such as modals and tabs. This

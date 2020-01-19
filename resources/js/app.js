@@ -6,6 +6,11 @@ window.Vue = require('vue');
 import VCalendar from 'v-calendar';
 Vue.use(VCalendar, {});
 
+//filters
+Vue.filter('dateFormat', function (value, format) {
+    return dayjs(value).format(format)
+});
+
 // components
 Vue.component('photo-upload', require('./components/PhotoUpload.vue').default);
 Vue.component('date-time-picker', require('./components/DateTimePicker.vue').default);

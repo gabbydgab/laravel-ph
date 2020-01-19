@@ -47,19 +47,19 @@
 
     <div class="border-t flex justify-between mt-6 py-6">
         <div class="w-48 overflow-hidden">
-            @if($previousArticle = $article->previousArticle())
-            <a href="{{ route('articles.show', $previousArticle) }}">
+            @if($previousRecord = $article->previousRecord())
+            <a href="{{ route('articles.show', $previousRecord) }}">
                 <div class="text-gray-600">Previous</div>
-                <h6 class="truncate">{{ $previousArticle->title }}</h6>
+                <h6 class="truncate">{{ $previousRecord->title }}</h6>
             </a>
             @endif
         </div>
 
         <div class="w-48 text-right overflow-hidden">
-            @if($nextArticle = $article->nextArticle())
-            <a href="{{ route('articles.show', $nextArticle) }}">
+            @if($nextRecord = $article->nextRecord())
+            <a href="{{ route('articles.show', $nextRecord) }}">
                 <div class="text-gray-600">Next</div>
-                <h6 class="truncate">{{ $nextArticle->title }}</h6>
+                <h6 class="truncate">{{ $nextRecord->title }}</h6>
             </a>
             @endif
         </div>

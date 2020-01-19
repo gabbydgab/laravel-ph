@@ -29,19 +29,29 @@ class ArticleTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_the_next_article()
+    public function it_can_get_tag_names()
     {
-        $articles = factory(Article::class, 2)->create();
+        $article = factory(Article::class)->create();
 
-        $this->assertTrue($articles[0]->nextArticle()->is($articles[1]));
+        $article->syncTags(['Laravel']);
+
+        $this->assertEquals(['Laravel'], $article->getTagNames());
     }
 
     /** @test */
-    public function it_can_get_the_previous_article()
+    public function it_can_get_the_next_record()
     {
         $articles = factory(Article::class, 2)->create();
 
-        $this->assertTrue($articles[1]->previousArticle()->is($articles[0]));
+        $this->assertTrue($articles[0]->nextRecord()->is($articles[1]));
+    }
+
+    /** @test */
+    public function it_can_get_the_previous_record()
+    {
+        $articles = factory(Article::class, 2)->create();
+
+        $this->assertTrue($articles[1]->previousRecord()->is($articles[0]));
     }
 
     /** @test */

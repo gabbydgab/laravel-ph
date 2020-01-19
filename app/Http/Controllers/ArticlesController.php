@@ -62,7 +62,7 @@ class ArticlesController extends Controller
 
         $article->syncTags(request('tags'));
 
-        return redirect()->route('articles.show', $article);
+        return redirect()->route('articles.index');
     }
 
     /**
@@ -108,7 +108,7 @@ class ArticlesController extends Controller
 
         $article->syncTags(request('tags'));
 
-        return redirect()->route('articles.show', $article);
+        return redirect()->route('articles.index');
     }
 
     /**

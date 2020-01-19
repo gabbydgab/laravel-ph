@@ -49,11 +49,11 @@
     <label class="inline-block text-gray-600 mb-2">Publish Date</label>
 
     <date-time-picker
-        value="{{ old('published_at', $article->published_at) }}"
+        value="{{ old('published_at', optional($article->published_at)->toIso8601String()) }}"
         v-on:input="$refs.published_at.value = $event"></date-time-picker>
 
     <input
-        value="{{ old('published_at', $article->published_at) }}"
+        value="{{ old('published_at', optional($article->published_at)->toIso8601String()) }}"
         name="published_at"
         ref="published_at"
         type="hidden">
@@ -66,7 +66,7 @@
 <div class="mt-6">
     <label class="inline-block text-gray-600 mb-2">Tags</label>
 
-    <tags-input name="tags[]" v-bind:value='@json(old("tags", $article->tags->pluck("name")->toArray()))'></tags-input>
+    <tags-input name="tags[]" v-bind:value='@json(old("tags", $article->getTagNames()))'></tags-input>
 </div>
 
 <div class="mt-10">

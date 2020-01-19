@@ -3,16 +3,13 @@
         <div class="flex -mx-4">
             <div class="w-48 px-4">
                 <div class="relative">
-                    <v-date-picker
-                        :value="localValueAsDate"
-                        @input="patchDate($event)"
-                        :popover="{ visibility: 'click' }">
+                    <v-date-picker v-model="localValue">
                         <input
-                            type="text"
-                            v-on="inputEvents"
-                            v-bind="inputProps"
-                            slot-scope="{ inputProps, inputEvents }"
                             class="block w-full px-3 py-2 pr-10 h-12 bg-white rounded shadow focus:outline-none"
+                            slot-scope="{ inputProps, inputEvents }"
+                            v-bind="inputProps"
+                            v-on="inputEvents"
+                            type="text"
                             readonly>
                     </v-date-picker>
 
@@ -25,11 +22,8 @@
             </div>
             <div class="w-32">
                 <div class="relative">
-                    <select
-                        :value="localValueAsTime"
-                        @input="patchTime($event.target.value)"
-                        class="block w-full px-3 py-2 pr-10 h-12 bg-white rounded shadow appearance-none leading-tight focus:outline-none">
-                        <option v-for="time in timeInterval" :key="time" :value="time">{{ time }}</option>
+                    <select v-model="localValue" class="block w-full px-3 py-2 pr-10 h-12 bg-white rounded shadow appearance-none leading-tight focus:outline-none">
+                        <option v-for="(time, i) in timeIntervals" :key="i" :value="time">{{ time | dateFormat('HH:mm A') }}</option>
                     </select>
 
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
@@ -44,73 +38,36 @@
 </template>
 
 <script>
-import _ from "lodash"
-import dayjs from "dayjs"
-
 export default {
     inheritAttrs: false,
+
     props: {
-        value: String,
-        format: {
-            type: String,
-            default: 'YYYY-MM-DD HH:mm:ss'
+        value: {
+            type: String
         }
     },
+
     data () {
         return {
-            localValue: this.value,
-            timeInterval: _.times(24).map(hour => ('0' + hour).slice(-2) + ':00')
+            localValue: dayjs(this.value).toDate()
         }
     },
+
     computed: {
-        localValueAsDate () {
-            if (! this.localValue) {
-                return  null
-            }
-
-            return new Date(this.localValue)
-        },
-
-        localValueAsTime () {
-            if (! this.localValue) {
-                return null
-            }
-
-            return dayjs(this.localValue).format('HH:mm')
+        timeIntervals() {
+            return _.times(24).filter(_ => dayjs(this.localValue).isValid()).flatMap(hour => [
+                dayjs(this.localValue).set('hour', hour).set('minute', 0).set('second', 0).toDate(),
+                dayjs(this.localValue).set('hour', hour).set('minute', 30).set('second', 0).toDate()
+            ])
         }
     },
-    methods: {
-        patchDate (value) {
-            let newDate = dayjs(value)
 
-            if (! newDate.isValid()) {
-                this.localValue = null
-
-                return
-            }
-
-            let localDate = dayjs(this.localValue)
-
-            if (! localDate.isValid()) {
-                this.localValue = newDate.format(this.format)
-
-                return
-            }
-
-            this.localValue = (
-                localDate.set('date', newDate.get('date'))
-                    .set('month', newDate.get('month'))
-                    .set('year', newDate.get('year'))
-                    .format(this.format)
-            )
-        },
-
-        patchTime (value) {
-            this.localValue = this.localValue.replace(/(\d\d):(\d\d)/, value)
-        }
-    },
     watch: {
         localValue: function (value) {
+            if (value && dayjs(value).isValid()) {
+                value = dayjs(value).toISOString()
+            }
+
             this.$emit('input', value)
         }
     }
