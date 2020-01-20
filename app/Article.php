@@ -7,9 +7,10 @@ use Illuminate\Support\Carbon;
 
 class Article extends Model
 {
-    use \App\Sluggable,
-        \App\Likeable,
-        \App\Taggable;
+    use \App\Likeable,
+        \App\Taggable,
+        \App\Sluggable,
+        \App\HasExcerptAttribute;
 
     /**
      * The attributes that aren't mass assignable.

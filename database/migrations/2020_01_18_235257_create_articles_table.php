@@ -21,6 +21,7 @@ class CreateArticlesTable extends Migration
                 ->onDelete('cascade');
             $table->string('title');
             $table->string('slug');
+            $table->text('excerpt')->nullable();
             $table->text('body')->nullable();
             $table->text('cover')->nullable();
             $table->integer('likes_count')->default(0);

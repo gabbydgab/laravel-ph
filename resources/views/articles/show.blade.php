@@ -1,5 +1,15 @@
 @extends('layouts.app')
 
+@push('metas')
+<meta property="og:site_name" content="{{ config('app.name') }}" />
+<meta property="og:url"content="{{ url()->current() }}" />
+<meta property="og:title" content="{{ $article->title }}" />
+<meta property="og:description" content="{{ strip_tags($article->excerpt) }}" />
+<meta property="og:image" content="{{ $article->cover }}" />
+<meta property="og:type" content="article" />
+<meta property="og:locale" content="en-us" />
+@endpush
+
 @section('content')
 <div class="max-w-3xl mx-auto px-4">
 
@@ -7,7 +17,7 @@
         <div class="flex items-center">
             <img class="rounded-full h-10 w-10 object-cover border-2" src="{{ $article->author->avatar }}" alt="{{ $article->author->name }} avatar">
             <div class="ml-4 leading-tight">
-                {{ $article->author->name }}
+                <div class="text-gray-900">{{ $article->author->name }}</div>
                 <div class="text-gray-600">{{ optional($article->published_at)->diffForHumans() }}</div>
             </div>
         </div>
@@ -16,7 +26,7 @@
             <form action="{{ route('articles.show', $article) . '/likes' }}" method="POST">
                 @csrf
                 <div class="flex items-center">
-                    <div class="text-gray-600 font-medium mr-2">{{ $article->likes_count }}</div>
+                    <div class="text-gray-600 font-medium mr-2">@include('articles.likes-count')</div>
                     @if($article->isLiked(auth()->user()))
                         @method("DELETE")
                         <button class="focus:outline-none text-red-600">
@@ -51,8 +61,8 @@
     @endif
 
     @if($article->body)
-        <div class="text-gray-700 leading-loose mt-6">
-            {{ $article->body }}
+        <div class="mt-6 markdown">
+            {!! $article->body !!}
         </div>
     @endif
 

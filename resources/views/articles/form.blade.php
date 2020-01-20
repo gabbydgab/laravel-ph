@@ -15,10 +15,23 @@
 </div>
 
 <div class="mt-6">
+    <label class="inline-block text-gray-600 mb-2">Excerpt</label>
+
+    <textarea
+        class="block w-full px-3 py-2 h-32 bg-white rounded shadow appearance-none resize-none focus:outline-none"
+        placeholder="A short version of this article"
+        name="excerpt">{{ old('excerpt', $article->excerpt) }}</textarea>
+
+    @error('excerpt')
+        <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
+    @enderror
+</div>
+
+<div class="mt-6">
     <label class="inline-block text-gray-600 mb-2">Body</label>
 
     <textarea
-        class="block w-full px-3 py-2 h-48 bg-white rounded shadow appearance-none resize-none focus:outline-none"
+        class="block w-full px-3 py-2 h-56 bg-white rounded shadow appearance-none resize-none focus:outline-none"
         placeholder="Write something nice"
         name="body">{{ old('body', $article->body) }}</textarea>
 

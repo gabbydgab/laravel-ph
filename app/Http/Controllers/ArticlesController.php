@@ -136,6 +136,7 @@ class ArticlesController extends Controller
     {
         return Arr::except($request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'excerpt' => ['nullable', 'string'],
             'body' => ['nullable', 'string'],
             'cover' => ['nullable', 'string', 'url'],
             'published_at' => ['nullable', 'date'],

@@ -17,6 +17,8 @@
 
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+
+    @stack('metas')
 </head>
 <body class="font-sans antialiased bg-gray-100 text-gray-900">
     <div id="app">

@@ -1,0 +1,41 @@
+.markdown {
+    @apply text-gray-700 leading-relaxed;
+
+    > * + * {
+        @apply mt-6;
+    }
+
+    h1,
+    h2,
+    h3 {
+        @apply mt-12 leading-none;
+    }
+
+    h3 {
+        @apply text-xl font-bold text-gray-800 tracking-tight;
+    }
+
+    a {
+        @apply text-gray-800 underline;
+    }
+
+    :not(pre) code {
+        @apply bg-gray-300 text-gray-800 font-medium p-1 text-sm rounded;
+    }
+
+    pre, code {
+        @apply font-mono text-sm;
+    }
+
+    pre code {
+        @apply rounded p-4 shadow;
+    }
+
+    ol {
+        @apply list-decimal pl-6;
+
+        li + li {
+            @apply mt-2;
+        }
+    }
+}
