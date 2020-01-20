@@ -143,17 +143,22 @@ class ArticlesTest extends TestCase
     }
 
     /** @test */
-    public function only_the_author_can_delete_an_article()
+    public function only_authors_with_delete_articles_permission_can_delete_an_article()
     {
         $article = factory(Article::class)->create();
 
-        // not the author and no delete articles permission
+        // not the author and no edit articles permission
         $this->signIn()
             ->delete(route('articles.destroy', $article))
             ->assertForbidden();
 
-        // not the author but with delete articles permission
+        // not the author but with edit articles permission
         $this->givePermissionTo('delete articles')
+            ->delete(route('articles.destroy', $article))
+            ->assertForbidden();
+
+        // author but no edit articles permission
+        $this->signIn($article->author)
             ->delete(route('articles.destroy', $article))
             ->assertForbidden();
     }

@@ -66,7 +66,8 @@ class ArticlePolicy
      */
     public function delete(User $user, Article $article)
     {
-        return $user->is($article->author);
+        return $user->can('delete articles')
+            && $user->is($article->author);
     }
 
     /**
