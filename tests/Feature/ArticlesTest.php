@@ -183,4 +183,65 @@ class ArticlesTest extends TestCase
 
         $this->assertCount(1, $article->fresh()->tags);
     }
+
+    /** @test */
+    public function unauthenticated_user_can_not_like_an_article()
+    {
+        $article = factory(Article::class)->create();
+
+        $this->post(route('articles.show', $article) . '/likes')
+            ->assertRedirect(route('login'));
+
+        $this->delete(route('articles.show', $article) . '/likes')
+            ->assertRedirect(route('login'));
+    }
+
+    /** @test */
+    public function a_user_can_like_an_article()
+    {
+        $this->withoutExceptionHandling();
+
+        $article = factory(Article::class)->create();
+
+        $this->signIn();
+
+        $this->post(route('articles.show', $article) . '/likes');
+
+        $this->assertCount(1, $article->fresh()->likes);
+        $this->assertEquals(1, $article->fresh()->likes_count);
+    }
+
+    /** @test */
+    public function a_user_can_unlike_an_article()
+    {
+        $this->withoutExceptionHandling();
+
+        $article = factory(Article::class)->create();
+
+        $this->signIn();
+
+        $article->like(auth()->user());
+
+        $this->delete(route('articles.show', $article) . '/likes');
+
+        $this->assertCount(0, $article->fresh()->likes);
+        $this->assertEquals(0, $article->fresh()->likes_count);
+    }
+
+    /** @test */
+    public function a_user_can_only_like_an_article_once()
+    {
+        $this->withoutExceptionHandling();
+
+        $article = factory(Article::class)->create();
+
+        $this->signIn();
+
+        $article->like(auth()->user());
+
+        $this->post(route('articles.show', $article) . '/likes');
+
+        $this->assertCount(1, $article->fresh()->likes);
+        $this->assertEquals(1, $article->fresh()->likes_count);
+    }
 }

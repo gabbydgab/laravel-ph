@@ -23,6 +23,7 @@ class CreateArticlesTable extends Migration
             $table->string('slug');
             $table->text('body')->nullable();
             $table->text('cover')->nullable();
+            $table->integer('likes_count')->default(0);
             $table->timestamp('published_at')->nullable();
             $table->timestamps();
         });

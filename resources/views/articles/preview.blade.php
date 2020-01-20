@@ -6,5 +6,7 @@
         <span class="text-gray-700">{{ $article->author->name }}</span>
         <span class="text-gray-500 mx-2">•</span>
         <span class="text-gray-700">{{ $article->published_at->diffForHumans() }}</span>
+        <span class="text-gray-500 mx-2">•</span>
+        <span class="text-gray-700">{{ $article->likes_count }} likes</span>
     </div>
 </div>

@@ -7,7 +7,9 @@ use Illuminate\Support\Carbon;
 
 class Article extends Model
 {
-    use Sluggable;
+    use \App\Sluggable,
+        \App\Likeable,
+        \App\Taggable;
 
     /**
      * The attributes that aren't mass assignable.
@@ -29,14 +31,6 @@ class Article extends Model
     public function author()
     {
         return $this->belongsTo(User::class, 'author_id');
-    }
-
-    /**
-     * Get the tags for this article.
-     */
-    public function tags()
-    {
-        return $this->belongsToMany(Tag::class, 'article_tags');
     }
 
     /**
@@ -78,28 +72,5 @@ class Article extends Model
             ->whereNotNull('published_at')
             ->orderByDesc('id')
             ->first();
-    }
-
-    /**
-     * Sync tags for this article.
-     *
-     * @param array $tags
-     * @return array
-     */
-    public function syncTags($tags)
-    {
-        return $this->tags()->sync(collect($tags)->map(function ($name) {
-            return Tag::firstOrCreate(compact('name'))->id;
-        }));
-    }
-
-    /**
-     * Get the names of the tags for this article
-     *
-     * @return void
-     */
-    public function getTagNames()
-    {
-        return $this->tags->pluck('name')->toArray();
     }
 }

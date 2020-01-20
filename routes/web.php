@@ -13,4 +13,7 @@ Route::post('/articles', 'ArticlesController@store')->name('articles.store');
 Route::patch('/articles/{article}', 'ArticlesController@update')->name('articles.update');
 Route::delete('/articles/{article}', 'ArticlesController@destroy')->name('articles.destroy');
 
+Route::post('/articles/{article}/likes', 'ArticleLikesController@store');
+Route::delete('/articles/{article}/likes', 'ArticleLikesController@destroy');
+
 Route::post('/media', 'MediaController@store')->name('media.store');

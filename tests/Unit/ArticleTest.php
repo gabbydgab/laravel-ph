@@ -39,6 +39,50 @@ class ArticleTest extends TestCase
     }
 
     /** @test */
+    public function it_has_likes()
+    {
+        $article = factory(Article::class)->create();
+
+        $this->assertInstanceOf(Collection::class, $article->likes);
+    }
+
+    /** @test */
+    public function it_can_be_liked()
+    {
+        $article = factory(Article::class)->create();
+
+        $article->like(factory(User::class)->create());
+
+        $this->assertCount(1, $article->likes);
+    }
+
+    /** @test */
+    public function it_can_be_unliked()
+    {
+        $article = factory(Article::class)->create();
+
+        $article->like($user = factory(User::class)->create());
+
+        $article->unlike($user);
+
+        $this->assertCount(0, $article->likes);
+    }
+
+    /** @test */
+    public function it_can_determined_if_it_has_been_liked_by_a_user()
+    {
+        $article = factory(Article::class)->create();
+
+        $johnny = factory(User::class)->create();
+        $sammy = factory(User::class)->create();
+
+        $article->like($sammy);
+
+        $this->assertFalse($article->isLiked($johnny));
+        $this->assertTrue($article->isLiked($sammy));
+    }
+
+    /** @test */
     public function it_can_get_the_next_record()
     {
         $articles = factory(Article::class, 2)->create();
