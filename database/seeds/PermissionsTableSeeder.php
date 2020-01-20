@@ -15,5 +15,9 @@ class PermissionsTableSeeder extends Seeder
         Permission::create(['name' => 'create articles']);
         Permission::create(['name' => 'edit articles']);
         Permission::create(['name' => 'delete articles']);
+
+        Permission::create(['name' => 'create events']);
+        Permission::create(['name' => 'edit events']);
+        Permission::create(['name' => 'delete events']);
     }
 }

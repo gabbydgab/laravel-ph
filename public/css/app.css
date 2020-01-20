@@ -599,6 +599,10 @@ video {
   height: auto;
 }
 
+[v-cloak] {
+  display: none;
+}
+
 .container {
   width: 100%;
 }

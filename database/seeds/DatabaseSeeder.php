@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         if (App::environment('local')) {
             $this->call(FakeUsersTableSeeder::class);
             $this->call(FakeArticlesTableSeeder::class);
+            $this->call(FakeEventsTableSeeder::class);
         }
     }
 }

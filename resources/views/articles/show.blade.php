@@ -24,7 +24,9 @@
             <img class="rounded-full h-10 w-10 object-cover border-2" src="{{ $article->author->avatar }}" alt="{{ $article->author->name }} avatar">
             <div class="ml-4 leading-tight">
                 <div class="text-gray-900">{{ $article->author->name }}</div>
-                <div class="text-gray-600">{{ optional($article->published_at)->diffForHumans() }}</div>
+                <div class="text-gray-600" v-cloak>
+                    <local-time value="{{ optional($article->published_at)->toIsoString() }}" />
+                </div>
             </div>
         </div>
 

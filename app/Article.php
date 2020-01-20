@@ -10,7 +10,7 @@ class Article extends Model
     use \App\Likeable,
         \App\Taggable,
         \App\Sluggable,
-        \App\HasExcerptAttribute;
+        \App\HasExcerpt;
 
     /**
      * The attributes that aren't mass assignable.

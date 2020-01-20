@@ -6,13 +6,14 @@ use Illuminate\Support\Str;
 
 trait Sluggable
 {
+
     /**
      * Boot the trait.
      */
     public static function bootSluggable()
     {
         parent::creating(function ($model) {
-            $model->slug = Str::slug($model->title);
+            $model->slug = Str::slug($model->{$model->getSluggableKeyName()});
         });
     }
 
@@ -24,5 +25,19 @@ trait Sluggable
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    /**
+     * Get the sluggable key for the model.
+     *
+     * @return string
+     */
+    public function getSluggableKeyName()
+    {
+        if (property_exists($this, 'sluggableKey')) {
+            return $this->sluggableKey;
+        }
+
+        return 'title';
     }
 }

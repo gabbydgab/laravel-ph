@@ -3,6 +3,7 @@
         <div class="flex items-center">
             <a class="text-white font-semibold" href="{{ url('/') }}">{{ config('app.name', 'Laravel Philippines') }}</a>
             <a class="text-white px-2 ml-4" href="{{ route('articles.index') }}">Articles</a>
+            <a class="text-white px-2 ml-4" href="{{ route('events.index') }}">Events</a>
         </div>
         <div class="flex items-center -mx-2">
             @guest

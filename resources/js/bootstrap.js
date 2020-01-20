@@ -1,18 +1,14 @@
 window._ = require('lodash');
-window.dayjs = require('dayjs');
 
 /**
- * We'll load jQuery and the Bootstrap jQuery plugin which provides support
- * for JavaScript based Bootstrap features such as modals and tabs. This
- * code may be modified to fit the specific needs of your application.
+ * We'll load day.js which allows us to handle date manipulation
+ * to our frontend application. This library will be used by
+ * our custom Vue components to render local datetime.
  */
 
-// try {
-//     window.Popper = require('popper.js').default;
-//     window.$ = window.jQuery = require('jquery');
+window.dayjs = require('dayjs');
 
-//     require('bootstrap');
-// } catch (e) {}
+window.dayjs.extend(require('dayjs/plugin/relativeTime'))
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

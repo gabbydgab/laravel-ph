@@ -2,12 +2,12 @@
 
 namespace App;
 
-trait HasExcerptAttribute
+trait HasExcerpt
 {
     /**
      * Boot the trait.
      */
-    public static function bootHasExcerptAttribute()
+    public static function bootHasExcerpt()
     {
         foreach(['creating', 'updating', 'saving'] as $event) {
             static::{$event}(function ($model) {
