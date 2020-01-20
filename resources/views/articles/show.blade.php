@@ -1,6 +1,11 @@
 @extends('layouts.app')
 
 @push('metas')
+<!-- Main Tags -->
+<meta name="title" content="{{ $article->title }}">
+<meta name="description" content="{{ strip_tags($article->excerpt) }}">
+
+<!-- Facebook -->
 <meta property="og:site_name" content="{{ config('app.name') }}" />
 <meta property="og:url"content="{{ url()->current() }}" />
 <meta property="og:title" content="{{ $article->title }}" />
@@ -8,6 +13,13 @@
 <meta property="og:image" content="{{ $article->cover }}" />
 <meta property="og:type" content="article" />
 <meta property="og:locale" content="en-us" />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="{{ url()->current() }}">
+<meta property="twitter:title" content="{{ $article->title }}">
+<meta property="twitter:description" content="{{ strip_tags($article->excerpt) }}">
+<meta property="twitter:image" content="{{ $article->cover }}">
 @endpush
 
 @push('page-scripts')
