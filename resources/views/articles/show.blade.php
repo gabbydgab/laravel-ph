@@ -10,6 +10,12 @@
 <meta property="og:locale" content="en-us" />
 @endpush
 
+@push('page-scripts')
+<!-- Facebook SDK -->
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v5.0"></script>
+@endpush
+
 @section('content')
 <div class="max-w-3xl mx-auto px-4">
 
@@ -65,6 +71,10 @@
             {!! $article->body !!}
         </div>
     @endif
+
+    <div class="mt-6">
+        <div class="fb-comments" data-href="{{ url()->current() }}" data-width="100%" data-numposts="5"></div>
+    </div>
 
     <div class="border-t flex justify-between mt-6 py-6">
         <div class="w-48 overflow-hidden">

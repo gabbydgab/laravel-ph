@@ -18,9 +18,12 @@
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
+    <!-- Metas -->
     @stack('metas')
 </head>
 <body class="font-sans antialiased bg-gray-100 text-gray-900">
+    @stack('page-scripts')
+
     <div id="app">
         @include('partials.nav')
         <main>
