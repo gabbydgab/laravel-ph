@@ -35,18 +35,11 @@ class Article extends Model
     }
 
     /**
-     * Set the published_at attribute.
-     *
-     * @param string $value
-     * @return void
+     * Scope the query to only include articles that are visible.
      */
-    public function setPublishedAtAttribute($value)
+    public function scopeVisible($query)
     {
-        if ($value) {
-            $value = Carbon::parse($value)->toDateTimeString();
-        }
-
-        $this->attributes['published_at'] = $value;
+        return $query->where('published_at', '<=', now());
     }
 
     /**
@@ -56,8 +49,8 @@ class Article extends Model
      */
     public function nextRecord()
     {
-        return Article::where('id', '>', $this->id)
-            ->whereNotNull('published_at')
+        return Article::visible()
+            ->where('id', '>', $this->id)
             ->orderBy('id')
             ->first();
     }
@@ -69,8 +62,8 @@ class Article extends Model
      */
     public function previousRecord()
     {
-        return Article::where('id', '<', $this->id)
-            ->whereNotNull('published_at')
+        return Article::visible()
+            ->where('id', '<', $this->id)
             ->orderByDesc('id')
             ->first();
     }

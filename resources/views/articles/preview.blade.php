@@ -10,10 +10,8 @@
     </div>
     <div class="mt-4">
         <span class="text-gray-700">{{ $article->author->name }}</span>
-        <span v-cloak>
-            <span class="text-gray-500 mx-2">•</span>
-            <local-time class="text-gray-700" value="{{ $article->published_at->toIsoString() }}" />
-        </span>
+        <span class="text-gray-500 mx-2">•</span>
+        <span class="text-gray-700">{{ $article->published_at->diffForHumans() }}</span>
         <span class="text-gray-500 mx-2">•</span>
         <span class="text-gray-700">@include('articles.likes-count')</span>
     </div>

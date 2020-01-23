@@ -11,28 +11,28 @@
 @endpush
 
 @section('content')
-<div class="bg-white border-b py-10">
+<div class="bg-white shadow py-10">
     <div class="max-w-5xl mx-auto px-4">
         <h1 class="font-medium text-3xl tracking-tight leading-none">{{ $event->name }}</h1>
         <h3 class="mt-2"><span class="text-gray-600">Hosted by</span> <span class="text-gray-700">{{ $event->host }}</span></h3>
     </div>
 </div>
 <div class="max-w-5xl mx-auto px-4">
-    <div class="flex -mx-4">
-        <div class="w-3/5 px-4">
+    <div class="flex flex-wrap justify-center -mx-4">
+        <div class="order-last lg:order-first  w-full max-w-lg lg:max-w-full lg:w-3/5 px-4">
             <img class="w-full h-64 object-cover rounded-lg shadow mt-6" src="{{ $event->cover }}" alt="">
             <h6 class="font-medium text-gray-800 leading-none tracking-tight text-xl mt-6">Description</h6>
             <div class="markdown mt-6">
                 {!! $event->body !!}
             </div>
         </div>
-        <div class="w-2/5 px-2">
+        <div class="order-first lg:order-last w-full max-w-lg lg:max-w-full lg:w-2/5 px-4">
             <div class="bg-white shadow rounded-lg p-6 mt-6">
                 <div class="flex items-start">
                     <svg class="flex-shrink-0 w-6 h-6 fill-current text-gray-500" viewBox="0 0 24 24">
                         <path d="M12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5M12,2A7,7 0 0,1 19,9C19,14.25 12,22 12,22C12,22 5,14.25 5,9A7,7 0 0,1 12,2M12,4A5,5 0 0,0 7,9C7,10 7,12 12,18.71C17,12 17,10 17,9A5,5 0 0,0 12,4Z" />
                     </svg>
-                    <div class="flex-1 ml-4 leading-relaxed whitespace-pre-line">{{ $event->location }}</div>
+                    <div class="flex-1 ml-4 leading-relaxed whitespace-pre-line">{{ $event->address }}</div>
                 </div>
 
                 <div class="flex items-start mt-6">
@@ -40,12 +40,8 @@
                         <path d="M19,19H5V8H19M16,1V3H8V1H6V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3H18V1M17,12H12V17H17V12Z" />
                     </svg>
                     <div class="flex-1 ml-4">
-                        <div>
-                            <local-time format="MMM DD, YYYY hh:mm A" value="{{ $event->started_at->toIsoString() }}"></local-time>
-                        </div>
-                        <div>
-                            <local-time format="MMM DD, YYYY hh:mm A" value="{{ $event->ended_at->toIsoString() }}"></local-time>
-                        </div>
+                        <div>{{ $event->started_at->setTimezone($event->timezone)->format('M d, Y h:i A') }}</div>
+                        <div>{{ $event->ended_at->setTimezone($event->timezone)->format('M d, Y h:i A') }}</div>
                     </div>
                 </div>
 
@@ -62,6 +58,12 @@
                 </div>
                 @endif
             </div>
+
+            @if($event->google_map_embed)
+            <div class="shadow rounded-lg overflow-hidden mt-6">
+                {!! $event->google_map_embed !!}
+            </div>
+            @endif
 
             @if($event->registration_url)
             <div class="bg-white shadow rounded-lg p-6 mt-6">

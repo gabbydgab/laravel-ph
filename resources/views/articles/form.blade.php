@@ -62,11 +62,11 @@
     <label class="inline-block text-gray-600 mb-2">Publish Date</label>
 
     <date-time-picker
-        value="{{ old('published_at', optional($article->published_at)->toIso8601String()) }}"
+        value="{{ old('published_at', optional($article->published_at)->format('c')) }}"
         v-on:input="$refs.published_at.value = $event"></date-time-picker>
 
     <input
-        value="{{ old('published_at', optional($article->published_at)->toIso8601String()) }}"
+        value="{{ old('published_at', $article->published_at) }}"
         name="published_at"
         ref="published_at"
         type="hidden">

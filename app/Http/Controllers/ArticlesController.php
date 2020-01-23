@@ -25,8 +25,8 @@ class ArticlesController extends Controller
      */
     public function index(Request $request)
     {
-        $articles = Article::latest('published_at')
-            ->whereNotNull('published_at')
+        $articles = Article::visible()
+            ->latest('published_at')
             ->paginate();
 
         return view('articles.index', compact('articles'));

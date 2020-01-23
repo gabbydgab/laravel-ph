@@ -13,9 +13,16 @@ $factory->define(Event::class, function (Faker $faker) {
         'cover' => unsplash(800, 540),
         'started_at' => $date = Carbon::parse($faker->date),
         'ended_at' => $date->copy()->addDays(3),
-        'location' => $faker->address,
+        'timezone' => $faker->timezone,
+        'address_line_1' => $faker->streetAddress,
+        'address_line_2' => null,
+        'city' => $faker->city,
+        'state' => $faker->state,
+        'postal_code' => $faker->postcode,
+        'country' => $faker->country,
         'host' => $faker->name,
+        'google_map_embed' => google_map_embed(),
         'website_url' => $faker->url,
-        'registration_url' => $faker->url,
+        'registration_url' => $faker->url
     ];
 });

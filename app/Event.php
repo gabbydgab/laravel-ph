@@ -31,32 +31,17 @@ class Event extends Model
     protected $sluggableKey = 'name';
 
     /**
-     * Set the started_at attribute.
-     *
-     * @param string $value
-     * @return void
+     * Get the address information for the event.
      */
-    public function setStartedAtAttribute($value)
+    public function getAddressAttribute()
     {
-        if ($value) {
-            $value = Carbon::parse($value)->toDateTimeString();
-        }
-
-        $this->attributes['started_at'] = $value;
-    }
-
-    /**
-     * Set the ended_at attribute.
-     *
-     * @param string $value
-     * @return void
-     */
-    public function setEndedAtAttribute($value)
-    {
-        if ($value) {
-            $value = Carbon::parse($value)->toDateTimeString();
-        }
-
-        $this->attributes['ended_at'] = $value;
+        return implode(', ', array_filter([
+            $this->attributes['address_line_1'],
+            $this->attributes['address_line_2'],
+            $this->attributes['city'],
+            $this->attributes['state'],
+            $this->attributes['country'],
+            $this->attributes['postal_code'],
+        ]));
     }
 }

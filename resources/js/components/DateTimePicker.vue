@@ -23,7 +23,7 @@
             <div class="w-32">
                 <div class="relative">
                     <select v-model="localValue" class="block w-full px-3 py-2 pr-10 h-12 bg-white rounded shadow appearance-none leading-tight focus:outline-none">
-                        <option v-for="(time, i) in timeIntervals" :key="i" :value="time">{{ time | dateFormat('HH:mm A') }}</option>
+                        <option v-for="(time, i) in timeIntervals" :key="i" :value="time">{{ time | dateFormat('hh:mm A') }}</option>
                     </select>
 
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
@@ -44,6 +44,10 @@ export default {
     props: {
         value: {
             type: String
+        },
+        format: {
+            type: String,
+            default: 'YYYY-MM-DD HH:mm:ss'
         }
     },
 
@@ -65,7 +69,7 @@ export default {
     watch: {
         localValue: function (value) {
             if (value && dayjs(value).isValid()) {
-                value = dayjs(value).toISOString()
+                value = dayjs(value).utc().format(this.format)
             }
 
             this.$emit('input', value)

@@ -14,13 +14,11 @@
                 </div>
                 <div>
                     <span class="text-gray-600">When:</span>
-                    <span class="text-gray-700" v-cloak>
-                        <local-time value="{{ $event->started_at->toIsoString() }}" format="MMM DD, YYYY, hh:mm A" />
-                    </span>
+                    <span class="text-gray-700">{{ $event->started_at->setTimezone($event->timezone)->format('M d, Y h:iA') }}</span>
                 </div>
                 <div>
                     <span class="text-gray-600">Where:</span>
-                    <span class="text-gray-700">{{ $event->location }}</span>
+                    <span class="text-gray-700">{{ $event->address }}</span>
                 </div>
             </div>
         </div>
